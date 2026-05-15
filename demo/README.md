@@ -5,16 +5,16 @@ Proyecto de demostración desarrollado en Java con Maven para ilustrar el **Open
 
 ---
 
-## 📖 ¿Qué es el Open/Closed Principle (OCP)?
+##  ¿Qué es el Open/Closed Principle (OCP)?
 
 El principio dice:
 
 **"Las clases deben estar abiertas para extensión, pero cerradas para modificación."**
 
 Es decir:
-- ✅ Puedes agregar nuevas funcionalidades
-- ✅ Sin modificar el código ya existente
-- ✅ Evitando dañar lo que ya funciona
+- Puedes agregar nuevas funcionalidades
+- Sin modificar el código ya existente
+- Evitando dañar lo que ya funciona
 
 ### Significado Fundamental
 
@@ -24,113 +24,47 @@ Una clase debe:
 
 ---
 
-## ❌ Ejemplo INCORRECTO (No cumple OCP)
+##  Ejemplo INCORRECTO (No cumple OCP)
 
 ### Problema
 
-Supongamos una aplicación que calcula pagos de empleados:
-
-```java
-public class CalculadoraSalario {
-
-    public double calcular(String tipoEmpleado) {
-
-        if(tipoEmpleado.equals("Administrador")) {
-            return 5000000;
-        }
-
-        if(tipoEmpleado.equals("Tecnico")) {
-            return 2500000;
-        }
-
-        return 0;
-    }
-}
-```
+Supongamos una aplicación que calcula pagos de empleados. En un diseño incorrecto, la clase toma un tipo de empleado como texto y aplica condiciones internas para decidir el salario.
 
 ### ¿Por qué está mal?
 
-Porque cada vez que aparezca un nuevo tipo de empleado:
+Porque cada vez que aparece un nuevo tipo de empleado:
 - "Practicante"
 - "Coordinador"
 - "Gerente"
 
-**Debemos MODIFICAR la clase**, lo que rompe el principio OCP.
+**Debemos modificar la misma clase**, lo que rompe el principio OCP y aumenta el riesgo de errores.
 
 ---
 
-## ✅ Ejemplo CORRECTO (Cumple OCP)
+##  Ejemplo CORRECTO (Cumple OCP)
 
-### Paso 1: Crear una interfaz
+### Concepto
 
-```java
-public interface Empleado {
-    double calcularSalario();
-}
-```
+En el diseño correcto, se define una interfaz `Empleado` con un método para calcular el salario. Cada tipo de empleado implementa esa interfaz en su propia clase.
 
-### Paso 2: Crear clases independientes
+### Implementación
 
-#### Administrador
-```java
-public class Administrador implements Empleado {
+- `Administrador` implementa `Empleado` y devuelve su propio salario.
+- `Tecnico` implementa `Empleado` y devuelve su propio salario.
+- `Gerente` implementa `Empleado` y puede ofrecer otra regla de salario.
+- `CalculadoraSalario` centraliza el cálculo del salario usando objetos `Empleado`.
 
-    @Override
-    public double calcularSalario() {
-        return 5000000;
-    }
-}
-```
+### Ventaja clave
 
-#### Técnico
-```java
-public class Tecnico implements Empleado {
-
-    @Override
-    public double calcularSalario() {
-        return 2500000;
-    }
-}
-```
-
-### Paso 3: Clase principal
-
-```java
-public class Main {
-
-    public static void main(String[] args) {
-
-        Empleado admin = new Administrador();
-        Empleado tecnico = new Tecnico();
-
-        System.out.println("Salario Administrador: " 
-                + admin.calcularSalario());
-
-        System.out.println("Salario Tecnico: " 
-                + tecnico.calcularSalario());
-    }
-}
-```
-
-### ¿Por qué este ejemplo sí cumple OCP?
-
-Porque si aparece un nuevo tipo de empleado:
+Si aparece un nuevo tipo de empleado:
 - **NO modificamos el código existente**
-- **Solo creamos una nueva clase**
+- **Solo agregamos una nueva clase**
 
-```java
-public class Gerente implements Empleado {
-
-    @Override
-    public double calcularSalario() {
-        return 7000000;
-    }
-}
-```
+Esto mantiene el sistema abierto para extensión y cerrado para modificación.
 
 ---
 
-## 💡 Ventajas del OCP
+##  Ventajas del OCP
 
 ### 1. Menos errores
 - No dañamos código ya funcionando
@@ -150,14 +84,14 @@ public class Gerente implements Empleado {
 
 ---
 
-## 🎯 Relación con POO
+##  Relación con POO
 
 El OCP utiliza los siguientes conceptos de Programación Orientada a Objetos:
 
-- **Herencia** - Las clases heredan del tipo base
+- **Herencia** - Las clases se basan en una abstracción común
 - **Interfaces** - Definen contratos que las clases implementan
 - **Polimorfismo** - Diferentes implementaciones del mismo contrato
-- **Abstracción** - Abstraemos el comportamiento común en la interfaz
+- **Abstracción** - Se abstrae el comportamiento común en la interfaz
 
 ---
 
@@ -175,7 +109,12 @@ demo/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── com/example/
-│   │   │       └── Main.java
+│   │   │       ├── Administrador.java
+│   │   │       ├── CalculadoraSalario.java
+│   │   │       ├── Empleado.java
+│   │   │       ├── Gerente.java
+│   │   │       ├── Main.java
+│   │   │       └── Tecnico.java
 │   │   └── resources/
 │   └── test/
 │       └── java/
@@ -226,3 +165,4 @@ Las contribuciones son bienvenidas. Por favor, crea un fork, realiza tus cambios
 ## Licencia
 
 Este proyecto es de código abierto.
+
